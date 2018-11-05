@@ -69,6 +69,20 @@ async function drawTodoList() {
 
  //2. 내용 채우고 이벤트 리스너 등록하기
  const todoListEl = fragment.querySelector('.todo-list')
+ const todoFormEl = fragment.querySelector('.todo-form')
+
+ todoFormEl.addEventListener('submit', async e => {
+   e.preventDefault()
+   const body = e.target.elements.body.value
+   const res = await api.post('/todos', {
+     //응답이 왔을때 채워지는 통 을 저장해주기.
+     body,
+     complete: false
+   })
+   if (res.status === 201) {
+     drawTodoList()
+   }
+ })
 
  list.forEach(todoItem => {
    //todoItem을 복사해서 todoList에 넣어줄거야.
@@ -89,6 +103,8 @@ rootEl.textContent = ''
 //rootEl을 비워준다.
 rootEl.appendChild(fragment)
 }
+
+//ul위에 폼이 있어가지고 할일테스트를 입력해서 엔터치면 다시 할일목록을 가져오는 코드
 
 
 drawLoginForm()
