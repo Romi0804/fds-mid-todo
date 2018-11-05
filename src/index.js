@@ -49,9 +49,7 @@ const fragment = document.importNode(templates.loginForm, true)
      password   //password: password
    })
    localStorage.setItem('token', res.data.token)
-   //임시 테스트 코드
-   const res2 = await api.get('/todos')
-   alert(JSON.stringify(res2.data))
+   drawTodoList()
  })
  //개발할때는 그려지는 것부터 확인한 뒤에 기능을 붙여라 !
 
@@ -62,23 +60,12 @@ const fragment = document.importNode(templates.loginForm, true)
 //할일 목록 그려주기
 //작업할때는 그리는거부터 해주기 ! 그다음에 통신을 해야해요!
 async function drawTodoList() {
- const list = [
-   {
-     id: 1,
-     userId: 2,
-     body: 'React 공부',
-     complete: false
-   },
-   {
-     id: 2,
-     userId: 2,
-     body: 'React Router 공부',
-     complete: false
-   }
- ]
+  //할일들을 추가하는대로 나타내어준다.
+ const res = await api.get('/todos')
+ const list = res.data
+
  //1. 템플릿 복사하기
  const fragment = document.importNode(templates.todoList, true)
-
 
  //2. 내용 채우고 이벤트 리스너 등록하기
  const todoListEl = fragment.querySelector('.todo-list')
@@ -98,8 +85,10 @@ async function drawTodoList() {
    todoListEl.appendChild(fragment)
  })
  //3. 문서 내부에 삽입하기
+rootEl.textContent = ''
+//rootEl을 비워준다.
 rootEl.appendChild(fragment)
 }
 
 
-drawTodoList()
+drawLoginForm()
