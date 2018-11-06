@@ -134,7 +134,14 @@ rootEl.appendChild(fragment)
 //ul위에 폼이 있어가지고 할일테스트를 입력해서 엔터치면 다시 할일목록을 가져오는 코드
 
 
-drawLoginForm()
+//만약 로그인을 한 상태라면 바로 할일 목록을 보여주고
+if (localStorage.getItem('token')){
+  drawTodoList()
+} else {
+  drawLoginForm()
+  //아니라면 로그인폼을 보여준다.
+}
+
 
 
 
