@@ -108,10 +108,18 @@ async function drawTodoList() {
 
    //삭제숙제
    const deleteEl= fragment.querySelector('.delete')
+   const completeEl = fragment.querySelector('.complete')
+
+   if(todoItem.complete) {
+     //todoItem의  complete가 true라면..
+     completeEl.setAttribute('checked', '')
+   }
+   //Attribute 이름만 있고 값이 없는 Arribute를 Boolean Attibute
+   //content editable, disable 찾아볼것
 
    deleteEl.addEventListener('click', async e => {
-     //삭제요청보내기
-     //성공시 할일 목록 다시 그리기
+     //1. 삭제요청보내기
+     //2. 성공시 할일 목록 다시 그리기
      //removeChild로 하면 서버에 있는 원본은 없어지지 않습니당 ! 조심해야행
      await api.delete('/todos/' + todoItem.id)
      //성공시 할일 목록 다시 그리기
@@ -119,6 +127,16 @@ async function drawTodoList() {
    })
 
    bodyEl.textContent = todoItem.body
+
+   completeEl.addEventListener('click', async e=> {
+       e.preventDefault()
+       //체크박스에도 preventDefault를 넣을수 있어요.
+       await api.patch('/todos/' + todoItem.id, {
+         complete: !todoItem.complete
+         //true를 false로, flase를 true
+       })
+       drawTodoList()
+   })
 
 
    //3. 문서 내부에 삽입하기
@@ -143,8 +161,6 @@ if (localStorage.getItem('token')){
   drawLoginForm()
   //아니라면 로그인폼을 보여준다.
 }
-
-
 
 
 //삭제버튼 후 이페이지를 다시한번 그리기
