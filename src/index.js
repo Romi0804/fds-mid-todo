@@ -23,7 +23,7 @@ api.interceptors.request.use(function (config) {
 const templates = {
   loginForm: document.querySelector('#login-form').content,
   todoList: document.querySelector('#todo-list').content,
-  todoItem: document.querySelector('#todo-item').content
+  todoItem: document.querySelector('#todo-item').content,
 }
 
 const rootEl = document.querySelector('.root')
@@ -80,8 +80,9 @@ async function drawTodoList() {
      complete: false
    })
    if (res.status === 201) {
-     drawTodoList()
+     //drawTodoList()
    }
+   //응답이 잘 왔으면 굳이 status 참고 안해도 된다. 삭제버튼 구현 할때 잘 참고하기
  })
 
  list.forEach(todoItem => {
@@ -93,11 +94,37 @@ async function drawTodoList() {
    //2. 내용 채우고 이벤트 리스너 등록하기
    const bodyEl = fragment.querySelector('.body')
 
+   //삭제숙제
+   const deleteEl= fragment.querySelector('.delete')
+
+   deleteEl.addEventListener('click', async e => {
+     //삭제요청보내기
+     //성공시 할일 목록 다시 그리기
+     //removeChild로 하면 서버에 있는 원본은 없어지지 않습니당 ! 조심해야행
+     await api.delete('/todos/' + todoItem.id)
+     //성공시 할일 목록 다시 그리기
+     drawTodoList()
+   })
+
    bodyEl.textContent = todoItem.body
+
 
    //3. 문서 내부에 삽입하기
    todoListEl.appendChild(fragment)
+
+  //  //삭제하기
+  //  const todoDeleteEl= fragment.querySelector('.delete')
+  //  todoDeleteEl.addEventListener('submit', async e => {
+  //   e.preventDefault()
+  //   const button = e.target.elements.button.value
+  //   const res = await api.delete('/todos', {
+  //     button,
+
+   // })
+
  })
+
+
  //3. 문서 내부에 삽입하기
 rootEl.textContent = ''
 //rootEl을 비워준다.
@@ -108,3 +135,7 @@ rootEl.appendChild(fragment)
 
 
 drawLoginForm()
+
+
+
+//삭제버튼 후 이페이지를 다시한번 그리기
