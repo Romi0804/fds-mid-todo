@@ -54,6 +54,8 @@ const fragment = document.importNode(templates.loginForm, true)
  //개발할때는 그려지는 것부터 확인한 뒤에 기능을 붙여라 !
 
  // 3. 문서내부에 삽입하기
+ rootEl.textContent = ''
+ //로그아웃 버튼을 누르면 그 위의 모든 것이 싹 없어지고 다시 로그인 폼만 띵! 나와욧 !
  rootEl.appendChild(fragment)
 }
 
@@ -70,6 +72,16 @@ async function drawTodoList() {
  //2. 내용 채우고 이벤트 리스너 등록하기
  const todoListEl = fragment.querySelector('.todo-list')
  const todoFormEl = fragment.querySelector('.todo-form')
+ const logoutEl = fragment.querySelector('.logout')
+
+ logoutEl.addEventListener('click', e => {
+   //sync 없는 이유는 서버에 요청 보낼것이 하나도 없기 때문에....
+   //로그아웃 절차
+   //1. 토큰 삭제
+   localStorage.removeItem('token')
+   //2. 로그인 폼 보여주기
+   drawLoginForm()
+ })
 
  todoFormEl.addEventListener('submit', async e => {
    e.preventDefault()
@@ -111,16 +123,6 @@ async function drawTodoList() {
 
    //3. 문서 내부에 삽입하기
    todoListEl.appendChild(fragment)
-
-  //  //삭제하기
-  //  const todoDeleteEl= fragment.querySelector('.delete')
-  //  todoDeleteEl.addEventListener('submit', async e => {
-  //   e.preventDefault()
-  //   const button = e.target.elements.button.value
-  //   const res = await api.delete('/todos', {
-  //     button,
-
-   // })
 
  })
 
